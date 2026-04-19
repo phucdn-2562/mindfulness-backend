@@ -1,5 +1,7 @@
 export default () => ({
   port: parseInt(process.env.PORT || '3000', 10),
+  appUrl: process.env.APP_URL || 'http://localhost:3000',
+  swaggerEnabled: process.env.SWAGGER_ENABLED === 'true',
   database: {
     scheme: process.env.MONGODB_SCHEME || 'mongodb',
     host: process.env.MONGODB_HOST || 'localhost',
