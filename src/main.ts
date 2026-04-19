@@ -3,16 +3,24 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  
+  // Nhận diện IP khách qua Proxy (Nginx, LB...)
+  app.set('trust proxy', 1);
   
   const configService = app.get(ConfigService);
   const port = configService.get<number>('port');
 
   app.setGlobalPrefix('api');
-  app.enableCors();
+  app.enableCors({
+    origin: configService.get('corsOrigins'),
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
 
   // Swagger setup
   if (configService.get('swaggerEnabled')) {
