@@ -3,7 +3,9 @@ import { AppService } from './app.service';
 import { RedisService } from './shared/redis/redis.service';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Health')
 @Controller()
 export class AppController {
   constructor(
